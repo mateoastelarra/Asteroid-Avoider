@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -15,12 +16,12 @@ public class PlayerMovement : MonoBehaviour
     
     void Update()
     {
-        if (Input.touchCount > 0)
+
+        if (Touchscreen.current.primaryTouch.press.isPressed)
         {
-            Touch touch = Input.GetTouch(0);
-            position = touch.position;
-            Vector3 auxPosition = mainCamera.ScreenToWorldPoint(new Vector3 (position.x, position.y, 0));
-            position = new Vector2(auxPosition.x, auxPosition.y);
+            position = Touchscreen.current.primaryTouch.position.ReadValue();
+            Vector3 worldPosition = mainCamera.ScreenToWorldPoint(new Vector3 (position.x, position.y, 0));
+            position = new Vector2(worldPosition.x, worldPosition.y);
             Debug.Log(position);
         }
     }
