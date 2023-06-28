@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,7 +22,21 @@ public class PlayerMovement : MonoBehaviour
     
     void Update()
     {
+        KeepPlayerOnScreen();
+        ProcessInput();
+    }
 
+    private void FixedUpdate() 
+    {
+        if (movementDirection == Vector3.zero){return;}
+
+        RB.AddForce(movementDirection * forceMagnitud, ForceMode.Force);
+
+        RB.velocity = Vector3.ClampMagnitude(RB.velocity, maxVelocity);
+    }
+
+    private void ProcessInput()
+    {
         if (Touchscreen.current.primaryTouch.press.isPressed)
         {
             position = Touchscreen.current.primaryTouch.position.ReadValue();
@@ -37,12 +52,21 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void FixedUpdate() 
+    private void KeepPlayerOnScreen()
     {
-        if (movementDirection == Vector3.zero){return;}
+        Vector3 newPosition = transform.position;
 
-        RB.AddForce(movementDirection * forceMagnitud, ForceMode.Force);
+        Vector3 viewPortPosition = mainCamera.WorldToViewportPoint(transform.position);
 
-        RB.velocity = Vector3.ClampMagnitude(RB.velocity, maxVelocity);
+        if (viewPortPosition.x < 0 || viewPortPosition.x > 1)
+        {
+            newPosition.x = - newPosition.x + 0.1f * Mathf.Sign(viewPortPosition.x);
+        }
+        if (viewPortPosition.y < 0 || viewPortPosition.y > 1)
+        {
+            newPosition.y = - newPosition.y + 0.4f * Mathf.Sign(viewPortPosition.y);;
+        }
+
+        transform.position = newPosition; 
     }
 }
