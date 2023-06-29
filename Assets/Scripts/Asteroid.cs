@@ -4,15 +4,12 @@ using UnityEngine;
 
 public class Asteroid : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private void OnTriggerEnter(Collider other) 
     {
+        PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
         
-    }
+        if ( playerHealth == null){return;}
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        playerHealth.Crash();
     }
 }
