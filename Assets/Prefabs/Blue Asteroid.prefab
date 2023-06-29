@@ -125,3 +125,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 133f11c9af563854792ca8e539f60382, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 464943296617761617, guid: e307b99f2fc76474cae2af36b56f3308, type: 3}
+  forceRange: {x: 10, y: 20}
