@@ -88,6 +88,9 @@ public class PlayerMovement : MonoBehaviour
 
         Quaternion targetRotation = Quaternion.LookRotation(RB.velocity, Vector3.back);
 
-        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        transform.rotation = Quaternion.Lerp(
+            transform.rotation, 
+            targetRotation, 
+            rotationSpeed * Time.deltaTime);
     }
 }
