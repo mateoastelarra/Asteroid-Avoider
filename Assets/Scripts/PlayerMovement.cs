@@ -24,9 +24,9 @@ public class PlayerMovement : MonoBehaviour
     
     void Update()
     {
-        KeepPlayerOnScreen();
-
         ProcessInput();
+
+        KeepPlayerOnScreen();
 
         RotateToFaceVelocity();
     }
