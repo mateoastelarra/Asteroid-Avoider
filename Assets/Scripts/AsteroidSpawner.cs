@@ -6,6 +6,10 @@ public class AsteroidSpawner : MonoBehaviour
 {
     [SerializeField] private GameObject[] asteroidPrefabs;
     [SerializeField] private float secondsBetweenAsteroids = 1.5f;
+    [SerializeField] private Vector2 force;
+    [SerializeField] private GameObject player;
+    [Range(0,1)] 
+    [SerializeField] float goToPlayerPosProbability;
     
 
     private float timer;
@@ -30,29 +34,54 @@ public class AsteroidSpawner : MonoBehaviour
 
     private void SpawnAsteroid()
     {
-        GameObject newAsteroid = asteroidPrefabs[Random.Range(0, asteroidPrefabs.Length)];
-        Instantiate(newAsteroid, SelectSpawningPoint(), Quaternion.identity);
-    }
-
-    private Vector3 SelectSpawningPoint()
-    {
         int side = Random.Range(0,4);
-        Vector2 spawningPoint = Vector2.one;
+
+        Vector2 spawnPoint = Vector2.zero;
+        Vector2 direction = Vector2.zero;
+
         switch (side)
         {
             case 0:
-                spawningPoint = new Vector2(0, Random.Range(0f,1f));
+                spawnPoint = new Vector2(0, Random.value);
+                direction = new Vector2(1, Random.Range(-1f, 1f));
                 break;
             case 1:
-                spawningPoint = new Vector2(1, Random.Range(0f,1f));
+                spawnPoint = new Vector2(1, Random.value);
+                direction = new Vector2(-1, Random.Range(-1f, 1f));
                 break;
             case 2:
-                spawningPoint = new Vector2(Random.Range(0f,1f), 0);
+                spawnPoint = new Vector2(Random.value, 0);
+                direction = new Vector2(Random.Range(-1f, 1f), 1);
                 break;
             case 3:
-                spawningPoint = new Vector2(Random.Range(0f,1f), 1);
+                spawnPoint = new Vector2(Random.value, 1);
+                direction = new Vector2(Random.Range(-1f, 1f), -1);
                 break;
         }
-        return mainCamera.ViewportToWorldPoint(new Vector3 (spawningPoint.x, spawningPoint.y, -mainCamera.transform.position.z));
+
+        Vector3 worldSpawnPoint = mainCamera.ViewportToWorldPoint(spawnPoint);
+        
+        worldSpawnPoint.z = 0;
+
+        GameObject selectedAsteroid = asteroidPrefabs[Random.Range(0, asteroidPrefabs.Length)];
+        
+        GameObject newAsteroid = Instantiate(
+                                selectedAsteroid, 
+                                worldSpawnPoint, 
+                                Quaternion.Euler(new Vector3 (0f, 0f, Random.Range(0f, 360f))));
+
+        Rigidbody RB = newAsteroid.GetComponent<Rigidbody>();
+
+        // Make the asteroid go to player position with certain probability
+        if (Random.value < goToPlayerPosProbability)
+        {
+            if (player == null){ return; }
+            Vector3 goToPlayerPos = player.transform.position - newAsteroid.transform.position;
+            direction.x = goToPlayerPos.x;
+            direction.y = goToPlayerPos.y;
+        }
+
+        RB.velocity = direction.normalized * Random.Range(force.x, force.y);
     }
+
 }
