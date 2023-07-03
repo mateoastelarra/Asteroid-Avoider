@@ -1,11 +1,15 @@
 using UnityEngine;
+using TMPro;
 
 public class PlayerHealth : MonoBehaviour
 {
-    [SerializeField] GameObject menu;
+    [SerializeField] GameOverHandler gameOverHandler;
+    
     public void Crash()
     {
         gameObject.SetActive(false);
-        menu.SetActive(true);
+        gameOverHandler.EndGame();
+
     }
+
 }
