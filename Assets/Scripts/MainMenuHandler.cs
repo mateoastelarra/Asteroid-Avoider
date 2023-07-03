@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class MainMenuHandler : MonoBehaviour
@@ -13,5 +12,10 @@ public class MainMenuHandler : MonoBehaviour
     {
         Debug.Log("quit");
         Application.Quit();
+    }
+
+    public void GoToMainMenu()
+    {
+        SceneManager.LoadScene(0);
     }
 }
