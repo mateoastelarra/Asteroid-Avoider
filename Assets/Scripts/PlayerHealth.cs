@@ -9,7 +9,6 @@ public class PlayerHealth : MonoBehaviour
     {
         gameObject.SetActive(false);
         gameOverHandler.EndGame();
-
     }
 
 }

@@ -6,6 +6,7 @@ public class ScoreHandler : MonoBehaviour
     [SerializeField] TextMeshProUGUI scoreText;
     [SerializeField] float scoreMultiplier = 10f;
     private float score = 0;
+    private bool isPaused = false;
 
     void Start()
     {
@@ -14,13 +15,24 @@ public class ScoreHandler : MonoBehaviour
 
     void Update()
     {
+        if (isPaused){ return; }
+
         score += Time.deltaTime * scoreMultiplier;
 
-        scoreText.text = Mathf.Floor(score).ToString();
+        scoreText.text = Mathf.FloorToInt(score).ToString();
     }
 
-    public float GetScore()
+    public int StopCountingAndGetScore()
     {
-        return Mathf.Floor(score);
+        isPaused = true;
+
+        scoreText.text = string.Empty;
+
+        return Mathf.FloorToInt(score);
+    }
+
+    public void UnpauseScore()
+    {
+        isPaused = false;
     }
 }

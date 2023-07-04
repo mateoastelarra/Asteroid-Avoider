@@ -7,14 +7,17 @@ public class GameOverHandler : MonoBehaviour
     [SerializeField] GameObject gameOverMenu;
     [SerializeField] ScoreHandler scoreHandler;
     [SerializeField] TextMeshProUGUI gameOverText;
+    [SerializeField] GameObject asteroidSpawner;
+    [SerializeField] GameObject player;
 
     public void EndGame()
     {
         gameOverMenu.SetActive(true);
 
-        SetScoreText();
+        SetScoreTextAndPauseScore();
 
-        scoreHandler.gameObject.SetActive(false);
+        asteroidSpawner.SetActive(false);
+
     }
 
     public void GoToMainMenu()
@@ -27,11 +30,18 @@ public class GameOverHandler : MonoBehaviour
         SceneManager.LoadScene(1);
     }
 
-    private void SetScoreText()
+    private void SetScoreTextAndPauseScore()
     {
-        Debug.Log("perdiste");
-        float finalScore = scoreHandler.GetScore();
+        float finalScore = scoreHandler.StopCountingAndGetScore();
         gameOverText.text = "GAME OVER. \n Your score is: " + finalScore.ToString();
+    }
+
+    public void Continue()
+    {
+        gameOverMenu.SetActive(false);
+        scoreHandler.UnpauseScore();
+        asteroidSpawner.SetActive(true);
+        player.SetActive(true);
     }
 
 }
