@@ -1437,7 +1437,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2099036606}
         m_TargetAssemblyTypeName: GameOverHandler, Assembly-CSharp
-        m_MethodName: Continue
+        m_MethodName: ContinueButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6606,6 +6606,7 @@ MonoBehaviour:
   gameOverText: {fileID: 984802857}
   asteroidSpawner: {fileID: 967571}
   player: {fileID: 1517838553}
+  continueButton: {fileID: 1867824939}
 --- !u!1 &2110122195
 GameObject:
   m_ObjectHideFlags: 0

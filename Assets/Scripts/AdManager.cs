@@ -5,7 +5,15 @@ using UnityEngine.Advertisements;
 
 public class AdManager : MonoBehaviour, IUnityAdsInitializationListener, IUnityAdsLoadListener, IUnityAdsShowListener
 {
+    [SerializeField] private bool testMode = true;
     public static AdManager instance;
+    private GameOverHandler gameOverHandler;
+
+#if UNITY_ANDROID
+    private string gameId = "5336577";
+#elif UNITY_IOS
+    private string gameId = "5336576";
+#endif
 
     private void Awake() 
     {
@@ -18,8 +26,15 @@ public class AdManager : MonoBehaviour, IUnityAdsInitializationListener, IUnityA
             instance = this;
             DontDestroyOnLoad(gameObject);
 
-            Advertisement.Initialize(gameId, testMode,this);
+            Advertisement.Initialize(gameId, testMode, this);
         }   
+    }
+
+    public void ShowAd(GameOverHandler gameOverHandler)
+    {
+        this.gameOverHandler = gameOverHandler;
+
+        Advertisement.Show("rewardedVideo");
     }
 
     public void OnInitializationComplete()
@@ -53,10 +68,16 @@ public class AdManager : MonoBehaviour, IUnityAdsInitializationListener, IUnityA
 
     public void OnUnityAdsShowComplete(string placementId, UnityAdsShowCompletionState showCompletionState)
     {
-        switch(showResult)
+        switch(showCompletionState)
         {
-            case ShowResult.Finished:
-                GameOverHandler.Continue();
+            case UnityAdsShowCompletionState.COMPLETED:
+                gameOverHandler.ContinueGame();
+                break;
+            case UnityAdsShowCompletionState.SKIPPED:
+                Debug.Log("Ad was Skipped.");
+                break;
+            case UnityAdsShowCompletionState.UNKNOWN:
+                Debug.LogWarning("Ad Failed.");
                 break;
         }
     }

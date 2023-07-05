@@ -1,14 +1,16 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEngine.UI;
 
 public class GameOverHandler : MonoBehaviour
 {
-    [SerializeField] GameObject gameOverMenu;
-    [SerializeField] ScoreHandler scoreHandler;
-    [SerializeField] TextMeshProUGUI gameOverText;
-    [SerializeField] GameObject asteroidSpawner;
-    [SerializeField] GameObject player;
+    [SerializeField] private GameObject gameOverMenu;
+    [SerializeField] private ScoreHandler scoreHandler;
+    [SerializeField] private TextMeshProUGUI gameOverText;
+    [SerializeField] private GameObject asteroidSpawner;
+    [SerializeField] private GameObject player;
+    [SerializeField] private Button continueButton;
 
     public void EndGame()
     {
@@ -33,14 +35,26 @@ public class GameOverHandler : MonoBehaviour
     private void SetScoreTextAndPauseScore()
     {
         float finalScore = scoreHandler.StopCountingAndGetScore();
+
         gameOverText.text = "GAME OVER. \n Your score is: " + finalScore.ToString();
     }
 
-    public void Continue()
+    public void ContinueButton()
+    {
+        AdManager.instance.ShowAd(this);
+
+        continueButton.interactable = false;
+    }
+
+    public void ContinueGame()
     {
         gameOverMenu.SetActive(false);
+
         scoreHandler.UnpauseScore();
+
         asteroidSpawner.SetActive(true);
+
+        player.transform.position = Vector3.zero;
         player.SetActive(true);
     }
 
